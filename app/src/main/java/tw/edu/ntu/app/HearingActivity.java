@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,9 +20,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -64,6 +70,17 @@ public class HearingActivity extends AppCompatActivity {
         ed1=(EditText)findViewById(R.id.editText);
         b1=(Button)findViewById(R.id.button1);
         ll = findViewById(R.id.ll);
+        gv = (GlobalVariable) getApplicationContext();
+        JWT_TOKEN = gv.getToken();
+        Log.i(JWT_TOKEN, gv.getToken());
+        requestQueue = Volley.newRequestQueue(getApplication());
+        requestQueue.start(); // Start the queue
+        String tagURL = gv.getWebApiURL() + "/tag";
+        JsonArrayRequest getTagsRequest = new JsonArrayRequest(Request.Method.GET, tagURL, new JSONArray(), new Response.Listener<JSONArray>() {
+        @Override
+        public void onResponse(JSONArray response) {
+
+        }
         TextView tv = new TextView(HearingActivity.this);
         tv.setText("請掃描 [] 的 QR Code");
         tv.setTextSize(TEXT_SIZE);
